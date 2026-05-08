@@ -1,56 +1,51 @@
 <?php
-session_start();
-include("db.php");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+require_once 'db.php';
 
-    $correo = $_POST['correo'];
-    $password = $_POST['password'];
+// Obtenemos los datos del formulario
+$email    = $_POST['email'];
+$pwd      = $_POST['pwd'];
+$recordar = isset($_POST['recordar']) ? true : false;
 
-    $sql = "SELECT * FROM usuarios 
-            WHERE correo='$correo' 
-            AND password='$password'";
+// Llamamos a la función y guardamos el objeto en $db
+$db = conectarDB();
 
-    $resultado = mysqli_query($conn, $sql);
+try {
+    $sql = "SELECT id, password, email FROM usuarios WHERE email = :email";
+    $query = $db->prepare($sql);
+    $resultado = $query->execute(['email' => $email]);
+    $usuario = $query->fetch(PDO::FETCH_ASSOC);
 
-    if (mysqli_num_rows($resultado) > 0) {
+    if ($usuario) {
+        $verify = password_verify($pwd, $usuario['password']);
 
-        $usuario = mysqli_fetch_assoc($resultado);
+        if ($verify) {
+            session_start();
+            $_SESSION['username'] = $usuario['email'];
+            $_SESSION['id']       = $usuario['id'];
 
-        $_SESSION['usuario'] = $usuario['nombre'];
+            // --- COOKIE ---
+            if ($recordar) {
+                // Guardar email por 30 días
+                setcookie('recordar_email', $email, time() + (30 * 24 * 60 * 60), '/');
+            } else {
+                // Si desmarcó el checkbox, borrar la cookie
+                setcookie('recordar_email', '', time() - 3600, '/');
+            }
+            // --------------
 
-        header("Location: dashboard.php");
-        exit();
+            header("Location: dashboard.php");
+            exit();
+
+        } else {
+            echo "La contraseña está mal... <a href='index.php'>Volver</a>";
+        }
 
     } else {
-        echo "Correo o contraseña incorrectos";
+        echo "No se encontraron datos. <a href='index.php'>Volver</a>";
     }
+
+} catch (PDOException $e) {
+    echo "Database Error: " . $e->getMessage();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Login</title>
-</head>
-<body>
-
-<h2>Iniciar Sesión</h2>
-
-<form method="POST">
-
-    <input type="email" name="correo" placeholder="Correo" required>
-
-    <br><br>
-
-    <input type="password" name="password" placeholder="Contraseña" required>
-
-    <br><br>
-
-    <button type="submit">Entrar</button>
-
-</form>
-
-</body>
-</html>

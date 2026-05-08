@@ -4,9 +4,9 @@
 
 function conectarDB() {
     $host = "localhost";
-    $db   = "diana_db";
-    $user = "diana_sd_app";
-    $pass = "Sotelo2004";
+    $db   = "murbina_db";
+    $user = "murbina_user";
+    $pass = "Mandarina";
     $charset = "utf8mb4";
 
     // El DSN (Data Source Name) define el tipo de driver y los datos del servidor
@@ -23,7 +23,7 @@ function conectarDB() {
         return new PDO($dsn, $user, $pass, $options);
     } catch (\PDOException $e) {
         // En producción, no muestres $e->getMessage() al usuario, regístralo en un log
-        die("Error de conexión: " . $e->getMessage()); 
+        die("Error de conexión: " . $e->getMessage());
     }
 }
 

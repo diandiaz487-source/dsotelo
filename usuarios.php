@@ -1,44 +1,65 @@
 <?php
 
+// Sesionecs
 session_start();
 
-require_once 'db.php';
+$_SESSION["username"] = "juan";
+$_SESSION["login_time"] = time();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// index.php
+require_once 'db.php'; // Traemos el código del otro archivo
 
-    $nombre = $_POST['nombre'];
-    $email  = $_POST['email'];
-    $pwd    = $_POST['pwd'];
+//require_once 'db-pgsql.php'; // Traemos el código del otro archivo
 
-    $db = conectarDB();
 
-    try {
+//  Obtenemos los datos del formulario
+     $nombre = $_POST['nombre'];
+     $email  = $_POST['email'];
+     $pwd = $_POST['pwd'];
+     // Llamamos a la función y guardamos el objeto en $db
+     $db = conectarDB();
+      
 
-        $passwordHash = password_hash($pwd, PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO usuarios (nombre, email, password)
-                VALUES (:nombre, :email, :password)";
-
+  try {
+        //  Preparamos la consulta con "marcadores" (:nombre, :email)
+        // Esto separa la estructura de la consulta de los datos reales
+        $sql = "INSERT INTO usuarios (nombre, email,password) VALUES (:nombre, :email, :password)";
         $query = $db->prepare($sql);
 
+	$passwordHash = password_hash($pwd, PASSWORD_DEFAULT);
+
+        // Ejecutamos pasando los datos en un array
         $resultado = $query->execute([
-            ':nombre'   => $nombre,
-            ':email'    => $email,
-            ':password' => $passwordHash
+            'nombre' => $nombre,
+            'email'  => $email,
+	    'password' => $passwordHash
         ]);
 
         if ($resultado) {
-
-            $_SESSION["username"] = $nombre;
-            $_SESSION["login_time"] = time();
-
-            header("Location: dashboard.php");
-            exit;
+            header("Location: index.php");
+            
+	   echo "El usuario se ha almacenado correctamente!  <a href='index.php'>Continuar</a>";
+	   
         }
 
     } catch (PDOException $e) {
+        // Manejo de errores (ej. si el email ya existe y es único)
 
-        echo "Error: " . $e->getMessage();
+        if ($e->errorInfo[1] == 1062) {
+            
+            echo "El email ya existe, favor de intendarlo con otro correo. <a href='index.php'>Continuar</a>";
+        }else {
+        // Handle other database errors
+        echo "Database Error: " . $e->getMessage();
+               
+        
     }
-}
+     
+    }
+
+
+
+
+
+
 ?>
