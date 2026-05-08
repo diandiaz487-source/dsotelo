@@ -59,7 +59,7 @@ $misprestamos = $misprestamos->fetchAll();
   <link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./wwwroot/css/bootstrap-icons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
+  <!-- <style>
     body { font-family: 'Lato', sans-serif; background: #fdf2f8; margin: 0; }
     header {
       background: linear-gradient(90deg, #be185d, #ec4899);
@@ -106,7 +106,10 @@ $misprestamos = $misprestamos->fetchAll();
     .btn-dev:hover { background: #fce7f3; }
     .alert-ok { background: #f0fdf4; border: 1px solid #86efac; border-radius: 7px; padding: 10px 14px; color: #166534; font-size: 13px; margin-bottom: 1rem; }
     .alert-err { background: #fce7f3; border: 1px solid #f9a8d4; border-radius: 7px; padding: 10px 14px; color: #be185d; font-size: 13px; margin-bottom: 1rem; }
-  </style>
+  </style> -->
+
+  
+  <link rel="stylesheet" href="./wwwroot/style.css">
 </head>
 <body>
 
