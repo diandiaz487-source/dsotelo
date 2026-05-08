@@ -1,106 +1,82 @@
 <?php
+include("conexion.php");
 
-include 'conexion.php';
+if(isset($_POST['id_usuario'])){
 
-if(isset($_POST['guardar'])){
+$id_usuario = $_POST['id_usuario'];
+$id_libro = $_POST['id_libro'];
+$fecha_prestamo = $_POST['fecha_prestamo'];
+$fecha_devolucion = $_POST['fecha_devolucion'];
+$estado = $_POST['estado'];
 
-    $libro = $_POST['libro'];
-    $usuario = $_POST['usuario'];
-    $fecha = $_POST['fecha'];
+$sql = "INSERT INTO prestamos(id_usuario,id_libro,fecha_prestamo,fecha_devolucion,estado)
+VALUES('$id_usuario','$id_libro','$fecha_prestamo','$fecha_devolucion','$estado')";
 
-    $sql = "INSERT INTO prestamos(libro,usuario,fecha)
-    VALUES('$libro','$usuario','$fecha')";
-
-    $conn->query($sql);
-
+mysqli_query($conn,$sql);
 }
-
-$resultado = $conn->query("SELECT * FROM prestamos");
-
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
-
+<html>
 <head>
-
-<meta charset="UTF-8">
-
-<title>Préstamos</title>
-
+<title>Prestamos</title>
 <link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
+<body class="container mt-5">
 
-<body class="bg-light">
-
-<div class="container mt-5">
-
-<h2 class="mb-4">Préstamos</h2>
+<h1>Préstamos</h1>
 
 <form method="POST">
 
-<input
-type="text"
-name="libro"
-class="form-control mb-3"
-placeholder="Libro"
-required>
+<input type="number" name="id_usuario" placeholder="ID Usuario" class="form-control mb-2" required>
 
-<input
-type="text"
-name="usuario"
-class="form-control mb-3"
-placeholder="Usuario"
-required>
+<input type="number" name="id_libro" placeholder="ID Libro" class="form-control mb-2" required>
 
-<input
-type="date"
-name="fecha"
-class="form-control mb-3"
-required>
+<input type="date" name="fecha_prestamo" class="form-control mb-2" required>
 
-<button
-type="submit"
-name="guardar"
-class="btn btn-primary">
+<input type="date" name="fecha_devolucion" class="form-control mb-2" required>
 
-Guardar Préstamo
+<input type="text" name="estado" placeholder="Estado" class="form-control mb-2" required>
 
+<button class="btn btn-warning">
+Registrar préstamo
 </button>
 
 </form>
 
 <hr>
 
-<table class="table table-bordered bg-white">
+<table class="table table-bordered">
 
 <tr>
 <th>ID</th>
-<th>Libro</th>
 <th>Usuario</th>
-<th>Fecha</th>
+<th>Libro</th>
+<th>Fecha préstamo</th>
+<th>Fecha devolución</th>
+<th>Estado</th>
 </tr>
 
-<?php while($fila = $resultado->fetch_assoc()) { ?>
+<?php
+
+$sql = "SELECT * FROM prestamos";
+$res = mysqli_query($conn,$sql);
+
+while($fila = mysqli_fetch_assoc($res)){
+?>
 
 <tr>
-
-<td><?php echo $fila['id']; ?></td>
-
-<td><?php echo $fila['libro']; ?></td>
-
-<td><?php echo $fila['usuario']; ?></td>
-
-<td><?php echo $fila['fecha']; ?></td>
-
+<td><?php echo $fila['id_prestamo']; ?></td>
+<td><?php echo $fila['id_usuario']; ?></td>
+<td><?php echo $fila['id_libro']; ?></td>
+<td><?php echo $fila['fecha_prestamo']; ?></td>
+<td><?php echo $fila['fecha_devolucion']; ?></td>
+<td><?php echo $fila['estado']; ?></td>
 </tr>
 
 <?php } ?>
 
 </table>
-
-</div>
 
 </body>
 </html>

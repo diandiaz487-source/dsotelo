@@ -1,96 +1,84 @@
 <?php
+include("conexion.php");
 
-include 'conexion.php';
-
-if(isset($_POST['guardar'])){
+if(isset($_POST['nombre'])){
 
     $nombre = $_POST['nombre'];
     $nacionalidad = $_POST['nacionalidad'];
+    $fecha = $_POST['fecha'];
 
-    $sql = "INSERT INTO autores(nombre,nacionalidad)
-    VALUES('$nombre','$nacionalidad')";
+    $sql = "INSERT INTO autores(nombre,nacionalidad,fecha_nacimiento)
+            VALUES('$nombre','$nacionalidad','$fecha')";
 
-    $conn->query($sql);
-
+    mysqli_query($conn,$sql);
 }
 
-$resultado = $conn->query("SELECT * FROM autores");
+if(isset($_GET['delete'])){
 
+    $id = $_GET['delete'];
+
+    mysqli_query($conn,"DELETE FROM autores WHERE id_autor=$id");
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
 <title>Autores</title>
-
 <link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
+<body class="container mt-5">
 
-<body class="bg-light">
+<h1>Autores</h1>
 
-<div class="container mt-5">
+<form method="POST" class="mb-4">
 
-<h2 class="mb-4">Autores</h2>
+<input type="text" name="nombre" placeholder="Nombre" class="form-control mb-2" required>
 
-<form method="POST">
+<input type="text" name="nacionalidad" placeholder="Nacionalidad" class="form-control mb-2" required>
 
-<input
-type="text"
-name="nombre"
-class="form-control mb-3"
-placeholder="Nombre"
-required>
+<input type="date" name="fecha" class="form-control mb-2" required>
 
-<input
-type="text"
-name="nacionalidad"
-class="form-control mb-3"
-placeholder="Nacionalidad"
-required>
-
-<button
-type="submit"
-name="guardar"
-class="btn btn-primary">
-
-Guardar Autor
-
+<button class="btn btn-primary">
+Agregar autor
 </button>
 
 </form>
 
-<hr>
-
-<table class="table table-bordered bg-white">
+<table class="table table-bordered">
 
 <tr>
 <th>ID</th>
 <th>Nombre</th>
 <th>Nacionalidad</th>
+<th>Fecha</th>
+<th>Eliminar</th>
 </tr>
 
-<?php while($fila = $resultado->fetch_assoc()) { ?>
+<?php
+
+$sql = "SELECT * FROM autores";
+$res = mysqli_query($conn,$sql);
+
+while($fila = mysqli_fetch_assoc($res)){
+?>
 
 <tr>
-
-<td><?php echo $fila['id']; ?></td>
-
+<td><?php echo $fila['id_autor']; ?></td>
 <td><?php echo $fila['nombre']; ?></td>
-
 <td><?php echo $fila['nacionalidad']; ?></td>
-
+<td><?php echo $fila['fecha_nacimiento']; ?></td>
+<td>
+<a href="autores.php?delete=<?php echo $fila['id_autor']; ?>" class="btn btn-danger btn-sm">
+Eliminar
+</a>
+</td>
 </tr>
 
 <?php } ?>
 
 </table>
-
-</div>
 
 </body>
 </html>

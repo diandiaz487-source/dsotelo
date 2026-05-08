@@ -4,367 +4,160 @@ include("conexion.php");
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — Biblioteca</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./wwwroot/css/bootstrap-icons.min.css">
 
-<title>Biblioteca Virtual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
-<link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="./wwwroot/css/bootstrap-icons.min.css">
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #f5ede0;
+      margin: 0;
+    }
 
-<style>
+    header {
+      background: #7a4f1e;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
 
-body{
-    background:#f4f6f9;
-}
+    .header-logo {
+      font-family: 'Playfair Display', serif;
+      color: #f5d98a;
+      font-size: 20px;
+      font-weight: 600;
+    }
 
-.sidebar{
-    position:fixed;
-    top:70px;
-    left:0;
-    bottom:0;
-    width:250px;
-    background:white;
-    border-right:1px solid #ddd;
-    padding:15px;
-}
+    .header-nav a {
+      color: #f5d98a;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 13px;
+      font-weight: bold;
+    }
 
-.sidebar .nav-link{
-    color:#333;
-    margin-bottom:5px;
-    border-radius:8px;
-}
+    aside {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      bottom: 0;
+      width: 220px;
+      background: #fffdf8;
+      border-right: 1px solid #c9a96e;
+      padding: 1.5rem 0;
+    }
 
-.sidebar .nav-link:hover{
-    background:#0d6efd;
-    color:white;
-}
+    aside a {
+      display: block;
+      padding: 10px 20px;
+      color: #4a2f0e;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-.content{
-    margin-left:260px;
-    padding:20px;
-}
+    aside a:hover {
+      background: #f5ede0;
+    }
 
-.card{
-    border:none;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
-}
+    main {
+      margin-left: 220px;
+      margin-top: 60px;
+      padding: 2rem;
+    }
 
-</style>
-
+    .card-box {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid #c9a96e;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
 <header>
+  <span class="header-logo">Biblioteca</span>
 
-<div class="px-3 py-2 text-bg-primary">
-
-<div class="container-fluid d-flex justify-content-between">
-
-<h4>
-<i class="bi bi-book"></i>
-Biblioteca Virtual
-</h4>
-
-<a href="logout.php" class="text-white text-decoration-none">
-<i class="bi bi-box-arrow-right"></i>
-Salir
-</a>
-
-</div>
-
-</div>
-
+  <nav class="header-nav">
+    <a href="logout.php">
+      <i class="bi bi-box-arrow-right"></i>
+      Salir
+    </a>
+  </nav>
 </header>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+<aside>
+  <a href="dashboard.php">🏠 Dashboard</a>
+  <a href="autores.php">👤 Autores</a>
+  <a href="libros.php">📚 Libros</a>
+  <a href="prestamos.php">📖 Préstamos</a>
+</aside>
 
-<ul class="nav flex-column">
+<main>
 
-<li>
-<a href="#" class="nav-link" onclick="showSection('dashboard')">
-<i class="bi bi-speedometer2"></i>
+<h1 style="font-family:'Playfair Display',serif;color:#4a2f0e;">
 Dashboard
-</a>
-</li>
+</h1>
 
-<li>
-<a href="#" class="nav-link" onclick="showSection('autores')">
-<i class="bi bi-person"></i>
-Autores
-</a>
-</li>
-
-<li>
-<a href="#" class="nav-link" onclick="showSection('libros')">
-<i class="bi bi-book"></i>
-Libros
-</a>
-</li>
-
-<li>
-<a href="#" class="nav-link" onclick="showSection('prestamos')">
-<i class="bi bi-journal-check"></i>
-Préstamos
-</a>
-</li>
-
-</ul>
-
-</div>
-
-<!-- CONTENIDO -->
-<div class="content">
-
-<!-- DASHBOARD -->
-<div id="dashboard">
-
-<div class="row g-4">
-
-<!-- LIBROS -->
-<div class="col-md-4">
-
-<div class="card p-3">
-
-<h6>Total Libros</h6>
+<div class="row">
 
 <?php
+$sql = "SELECT COUNT(*) as total FROM autores";
+$res = mysqli_query($conn, $sql);
+$autores = mysqli_fetch_assoc($res);
+?>
 
+<div class="col-md-4">
+  <div class="card-box">
+    <h5>Total autores</h5>
+    <h2><?php echo $autores['total']; ?></h2>
+  </div>
+</div>
+
+<?php
 $sql = "SELECT COUNT(*) as total FROM libros";
-$resultado = mysqli_query($conn,$sql);
-$fila = mysqli_fetch_assoc($resultado);
-
+$res = mysqli_query($conn, $sql);
+$libros = mysqli_fetch_assoc($res);
 ?>
 
-<h2><?php echo $fila['total']; ?></h2>
-
-</div>
-
-</div>
-
-<!-- AUTORES -->
 <div class="col-md-4">
-
-<div class="card p-3">
-
-<h6>Total Autores</h6>
+  <div class="card-box">
+    <h5>Total libros</h5>
+    <h2><?php echo $libros['total']; ?></h2>
+  </div>
+</div>
 
 <?php
-
-$sql2 = "SELECT COUNT(*) as total FROM autores";
-$resultado2 = mysqli_query($conn,$sql2);
-$fila2 = mysqli_fetch_assoc($resultado2);
-
+$sql = "SELECT COUNT(*) as total FROM prestamos";
+$res = mysqli_query($conn, $sql);
+$prestamos = mysqli_fetch_assoc($res);
 ?>
 
-<h2><?php echo $fila2['total']; ?></h2>
-
-</div>
-
-</div>
-
-<!-- PRESTAMOS -->
 <div class="col-md-4">
-
-<div class="card p-3">
-
-<h6>Total Préstamos</h6>
-
-<?php
-
-$sql3 = "SELECT COUNT(*) as total FROM prestamos";
-$resultado3 = mysqli_query($conn,$sql3);
-$fila3 = mysqli_fetch_assoc($resultado3);
-
-?>
-
-<h2><?php echo $fila3['total']; ?></h2>
-
+  <div class="card-box">
+    <h5>Total préstamos</h5>
+    <h2><?php echo $prestamos['total']; ?></h2>
+  </div>
 </div>
 
 </div>
 
-</div>
-
-</div>
-
-<!-- AUTORES -->
-<div id="autores" style="display:none;">
-
-<h3 class="mb-3">Autores</h3>
-
-<table class="table table-hover bg-white">
-
-<thead>
-
-<tr>
-<th>ID</th>
-<th>Nombre</th>
-<th>Nacionalidad</th>
-<th>Fecha Nacimiento</th>
-</tr>
-
-</thead>
-
-<tbody>
-
-<?php
-
-$sql = "SELECT * FROM autores";
-$resultado = mysqli_query($conn,$sql);
-
-while($fila = mysqli_fetch_assoc($resultado)){
-
-?>
-
-<tr>
-
-<td><?php echo $fila['id_autor']; ?></td>
-<td><?php echo $fila['nombre']; ?></td>
-<td><?php echo $fila['nacionalidad']; ?></td>
-<td><?php echo $fila['fecha_nacimiento']; ?></td>
-
-</tr>
-
-<?php } ?>
-
-</tbody>
-
-</table>
-
-</div>
-
-<!-- LIBROS -->
-<div id="libros" style="display:none;">
-
-<h3 class="mb-3">Libros</h3>
-
-<table class="table table-hover bg-white">
-
-<thead>
-
-<tr>
-
-<th>ID</th>
-<th>Título</th>
-<th>ISBN</th>
-<th>Categoría</th>
-<th>Año</th>
-<th>Stock</th>
-<th>Autor</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<?php
-
-$sql = "SELECT * FROM libros";
-$resultado = mysqli_query($conn,$sql);
-
-while($fila = mysqli_fetch_assoc($resultado)){
-
-?>
-
-<tr>
-
-<td><?php echo $fila['id_libro']; ?></td>
-<td><?php echo $fila['titulo']; ?></td>
-<td><?php echo $fila['isbn']; ?></td>
-<td><?php echo $fila['categoria']; ?></td>
-<td><?php echo $fila['anio_publicacion']; ?></td>
-<td><?php echo $fila['stock']; ?></td>
-<td><?php echo $fila['id_autor']; ?></td>
-
-</tr>
-
-<?php } ?>
-
-</tbody>
-
-</table>
-
-</div>
-
-<!-- PRESTAMOS -->
-<div id="prestamos" style="display:none;">
-
-<h3 class="mb-3">Préstamos</h3>
-
-<table class="table table-hover bg-white">
-
-<thead>
-
-<tr>
-
-<th>ID</th>
-<th>Usuario</th>
-<th>Libro</th>
-<th>Fecha préstamo</th>
-<th>Fecha devolución</th>
-<th>Estado</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<?php
-
-$sql = "SELECT * FROM prestamos";
-$resultado = mysqli_query($conn,$sql);
-
-while($fila = mysqli_fetch_assoc($resultado)){
-
-?>
-
-<tr>
-
-<td><?php echo $fila['id_prestamo']; ?></td>
-<td><?php echo $fila['id_usuario']; ?></td>
-<td><?php echo $fila['id_libro']; ?></td>
-<td><?php echo $fila['fecha_prestamo']; ?></td>
-<td><?php echo $fila['fecha_devolucion']; ?></td>
-<td><?php echo $fila['estado']; ?></td>
-
-</tr>
-
-<?php } ?>
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<script>
-
-function showSection(section){
-
-document.getElementById('dashboard').style.display='none';
-document.getElementById('autores').style.display='none';
-document.getElementById('libros').style.display='none';
-document.getElementById('prestamos').style.display='none';
-
-document.getElementById(section).style.display='block';
-
-}
-
-</script>
-
-<script src="./wwwroot/js/bootstrap.bundle.min.js"></script>
+</main>
 
 </body>
 </html>
