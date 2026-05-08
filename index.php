@@ -108,7 +108,7 @@
   </head>
   <body>
     <div class="bib-card">
-      <h1 class="bib-title">Iniciar sesión</h1>
+      <h1 class="bib-title">Iniciar sesiónn</h1>
       <p class="bib-subtitle">Acceder</p>
       <div class="bib-ornament"></div>
       <form method="POST" action="login.php">
