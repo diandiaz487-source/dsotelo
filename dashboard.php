@@ -1,457 +1,370 @@
-```php id="8kcm3r"
+<?php
+include("conexion.php");
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Biblioteca Rosa 2026</title>
+<title>Biblioteca Virtual</title>
 
-    <link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./wwwroot/css/bootstrap-icons.min.css">
+<link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./wwwroot/css/bootstrap-icons.min.css">
 
-    <style>
+<style>
 
-        body{
-            background-color:#fff5f8;
-        }
+body{
+    background:#f4f6f9;
+}
 
-        .navbar-custom{
-            background: linear-gradient(135deg,#ff4f9a 0%, #ff85b3 100%);
-        }
+.sidebar{
+    position:fixed;
+    top:70px;
+    left:0;
+    bottom:0;
+    width:250px;
+    background:white;
+    border-right:1px solid #ddd;
+    padding:15px;
+}
 
-        .navbar-brand{
-            font-weight:700;
-            font-size:1.8rem;
-            color:white !important;
-        }
+.sidebar .nav-link{
+    color:#333;
+    margin-bottom:5px;
+    border-radius:8px;
+}
 
-        .sidebar{
-            background: linear-gradient(180deg,#ffe0ec 0%,#ffd1e3 100%);
-            min-height:100vh;
-        }
+.sidebar .nav-link:hover{
+    background:#0d6efd;
+    color:white;
+}
 
-        .nav-link{
-            border-radius:12px;
-            margin-bottom:8px;
-            transition:0.3s;
-            color:#c2185b;
-            font-weight:600;
-        }
+.content{
+    margin-left:260px;
+    padding:20px;
+}
 
-        .nav-link:hover{
-            background-color:rgba(255,105,180,0.15);
-            transform:translateX(5px);
-            color:#ad1457;
-        }
+.card{
+    border:none;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
 
-        .nav-link.active{
-            background:linear-gradient(135deg,#ff4f9a 0%,#ff85b3 100%);
-            color:white !important;
-        }
-
-        .card-hover{
-            border:none;
-            border-radius:20px;
-            transition:0.3s;
-        }
-
-        .card-hover:hover{
-            transform:translateY(-5px);
-            box-shadow:0 10px 25px rgba(255,105,180,0.25);
-        }
-
-        .btn-modern{
-            background:linear-gradient(135deg,#ff4f9a 0%,#ff85b3 100%);
-            border:none;
-            color:white;
-            border-radius:30px;
-            padding:10px 25px;
-            font-weight:600;
-            transition:0.3s;
-        }
-
-        .btn-modern:hover{
-            transform:scale(1.05);
-            color:white;
-            box-shadow:0 5px 15px rgba(255,105,180,0.4);
-        }
-
-        .stats-card{
-            background:linear-gradient(135deg,#ff4f9a 0%,#ff85b3 100%);
-            color:white;
-            border:none;
-            border-radius:20px;
-        }
-
-        .stats-card .card-body{
-            padding:2rem;
-        }
-
-        .title-dashboard{
-            color:#d81b60;
-            font-weight:700;
-        }
-
-        .card{
-            border-radius:20px !important;
-        }
-
-        .shadow-sm{
-            box-shadow:0 4px 12px rgba(255,105,180,0.15) !important;
-        }
-
-        @media(max-width:767px){
-
-            .sidebar{
-                position:fixed;
-                top:0;
-                left:-100%;
-                width:280px;
-                z-index:1050;
-                transition:left 0.3s ease;
-            }
-
-            .sidebar.show{
-                left:0;
-            }
-
-            .sidebar-backdrop{
-                position:fixed;
-                top:0;
-                left:0;
-                width:100%;
-                height:100%;
-                background:rgba(0,0,0,0.5);
-                z-index:1040;
-                display:none;
-            }
-
-            .sidebar-backdrop.show{
-                display:block;
-            }
-
-        }
-
-    </style>
-
-    <script src="./wwwroot/js/jquery-4.0.0.min.js"></script>
-    <script src="./wwwroot/js/script.js"></script>
-    <script src="./wwwroot/js/dashboard.js"></script>
+</style>
 
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
+<!-- HEADER -->
+<header>
 
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
+<div class="px-3 py-2 text-bg-primary">
 
-        <div class="container-fluid">
+<div class="container-fluid d-flex justify-content-between">
 
-            <button class="btn btn-outline-light d-lg-none me-2" type="button" id="sidebarToggle">
-                <i class="bi bi-list"></i>
-            </button>
+<h4>
+<i class="bi bi-book"></i>
+Biblioteca Virtual
+</h4>
 
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-book-half me-2"></i>
-                Biblioteca Rosa 2026
-            </a>
+<a href="logout.php" class="text-white text-decoration-none">
+<i class="bi bi-box-arrow-right"></i>
+Salir
+</a>
 
-            <div class="d-flex align-items-center">
+</div>
 
-                <span class="text-white me-3">
-                    <i class="bi bi-person-circle me-1"></i>
-                    diandiaz12@gmail.com
-                </span>
+</div>
 
-                <a href="logout.php" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right me-1"></i>
-                    Salir
-                </a>
+</header>
 
-            </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-        </div>
+<ul class="nav flex-column">
 
-    </nav>
+<li>
+<a href="#" class="nav-link" onclick="showSection('dashboard')">
+<i class="bi bi-speedometer2"></i>
+Dashboard
+</a>
+</li>
 
-    <!-- BACKDROP -->
+<li>
+<a href="#" class="nav-link" onclick="showSection('autores')">
+<i class="bi bi-person"></i>
+Autores
+</a>
+</li>
 
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<li>
+<a href="#" class="nav-link" onclick="showSection('libros')">
+<i class="bi bi-book"></i>
+Libros
+</a>
+</li>
 
-    <!-- SIDEBAR -->
+<li>
+<a href="#" class="nav-link" onclick="showSection('prestamos')">
+<i class="bi bi-journal-check"></i>
+Préstamos
+</a>
+</li>
 
-    <aside class="sidebar d-flex flex-column p-3 position-fixed" id="sidebar">
+</ul>
 
-        <h5 class="fw-bold text-danger mb-4">
-            <i class="bi bi-grid-3x3-gap me-2"></i>
-            Menú Principal
-        </h5>
+</div>
 
-        <nav class="nav nav-pills flex-column flex-grow-1">
+<!-- CONTENIDO -->
+<div class="content">
 
-            <a class="nav-link active" href="dashboard.php">
-                <i class="bi bi-house-door-fill me-2"></i>
-                Dashboard
-            </a>
+<!-- DASHBOARD -->
+<div id="dashboard">
 
-            <a class="nav-link" href="autores.php">
-                <i class="bi bi-people-fill me-2"></i>
-                Autores
-            </a>
+<div class="row g-4">
 
-            <a class="nav-link" href="libros.php">
-                <i class="bi bi-book-fill me-2"></i>
-                Libros
-            </a>
+<!-- LIBROS -->
+<div class="col-md-4">
 
-            <a class="nav-link" href="prestamos.php">
-                <i class="bi bi-journal-bookmark-fill me-2"></i>
-                Préstamos
-            </a>
+<div class="card p-3">
 
-        </nav>
+<h6>Total Libros</h6>
 
-    </aside>
+<?php
 
-    <!-- CONTENIDO -->
+$sql = "SELECT COUNT(*) as total FROM libros";
+$resultado = mysqli_query($conn,$sql);
+$fila = mysqli_fetch_assoc($resultado);
 
-    <main class="flex-grow-1 p-4" id="mainContent" style="margin-left:280px;">
+?>
 
-        <div class="container-fluid">
+<h2><?php echo $fila['total']; ?></h2>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
+</div>
 
-                <div>
+</div>
 
-                    <h1 class="h2 title-dashboard mb-1">
-                        Panel de Control
-                    </h1>
+<!-- AUTORES -->
+<div class="col-md-4">
 
-                    <p class="text-muted mb-0">
-                        Gestiona tu biblioteca digital con facilidad
-                    </p>
+<div class="card p-3">
 
-                </div>
+<h6>Total Autores</h6>
 
-            </div>
+<?php
 
-            <!-- TARJETAS -->
+$sql2 = "SELECT COUNT(*) as total FROM autores";
+$resultado2 = mysqli_query($conn,$sql2);
+$fila2 = mysqli_fetch_assoc($resultado2);
 
-            <div class="row g-4 mb-5">
+?>
 
-                <div class="col-md-6 col-lg-4">
+<h2><?php echo $fila2['total']; ?></h2>
 
-                    <div class="card card-hover h-100 shadow-sm">
+</div>
 
-                        <div class="card-body text-center p-4">
+</div>
 
-                            <div class="bg-danger bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                style="width:60px;height:60px;">
+<!-- PRESTAMOS -->
+<div class="col-md-4">
 
-                                <i class="bi bi-people-fill text-white fs-4"></i>
+<div class="card p-3">
 
-                            </div>
+<h6>Total Préstamos</h6>
 
-                            <h5 class="fw-bold">
-                                Gestión de Autores
-                            </h5>
+<?php
 
-                            <p class="text-muted">
-                                Administra autores fácilmente.
-                            </p>
+$sql3 = "SELECT COUNT(*) as total FROM prestamos";
+$resultado3 = mysqli_query($conn,$sql3);
+$fila3 = mysqli_fetch_assoc($resultado3);
 
-                            <a href="autores.php" class="btn btn-modern">
-                                Acceder
-                            </a>
+?>
 
-                        </div>
+<h2><?php echo $fila3['total']; ?></h2>
 
-                    </div>
+</div>
 
-                </div>
+</div>
 
-                <div class="col-md-6 col-lg-4">
+</div>
 
-                    <div class="card card-hover h-100 shadow-sm">
+</div>
 
-                        <div class="card-body text-center p-4">
+<!-- AUTORES -->
+<div id="autores" style="display:none;">
 
-                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                style="width:60px;height:60px;">
+<h3 class="mb-3">Autores</h3>
 
-                                <i class="bi bi-book-fill text-white fs-4"></i>
+<table class="table table-hover bg-white">
 
-                            </div>
+<thead>
 
-                            <h5 class="fw-bold">
-                                Catálogo de Libros
-                            </h5>
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Nacionalidad</th>
+<th>Fecha Nacimiento</th>
+</tr>
 
-                            <p class="text-muted">
-                                Gestiona libros y disponibilidad.
-                            </p>
+</thead>
 
-                            <a href="libros.php" class="btn btn-modern">
-                                Acceder
-                            </a>
+<tbody>
 
-                        </div>
+<?php
 
-                    </div>
+$sql = "SELECT * FROM autores";
+$resultado = mysqli_query($conn,$sql);
 
-                </div>
+while($fila = mysqli_fetch_assoc($resultado)){
 
-                <div class="col-md-6 col-lg-4">
+?>
 
-                    <div class="card card-hover h-100 shadow-sm">
+<tr>
 
-                        <div class="card-body text-center p-4">
+<td><?php echo $fila['id_autor']; ?></td>
+<td><?php echo $fila['nombre']; ?></td>
+<td><?php echo $fila['nacionalidad']; ?></td>
+<td><?php echo $fila['fecha_nacimiento']; ?></td>
 
-                            <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                style="width:60px;height:60px;">
+</tr>
 
-                                <i class="bi bi-journal-bookmark-fill text-white fs-4"></i>
+<?php } ?>
 
-                            </div>
+</tbody>
 
-                            <h5 class="fw-bold">
-                                Sistema de Préstamos
-                            </h5>
+</table>
 
-                            <p class="text-muted">
-                                Controla préstamos y devoluciones.
-                            </p>
+</div>
 
-                            <a href="prestamos.php" class="btn btn-modern">
-                                Acceder
-                            </a>
+<!-- LIBROS -->
+<div id="libros" style="display:none;">
 
-                        </div>
+<h3 class="mb-3">Libros</h3>
 
-                    </div>
+<table class="table table-hover bg-white">
 
-                </div>
+<thead>
 
-            </div>
+<tr>
 
-            <!-- ESTADISTICAS -->
+<th>ID</th>
+<th>Título</th>
+<th>ISBN</th>
+<th>Categoría</th>
+<th>Año</th>
+<th>Stock</th>
+<th>Autor</th>
 
-            <div class="card border-0 shadow-sm">
+</tr>
 
-                <div class="card-header bg-white border-0">
+</thead>
 
-                    <h5 class="fw-bold text-danger">
-                        <i class="bi bi-bar-chart-line me-2"></i>
-                        Estadísticas del Sistema
-                    </h5>
+<tbody>
 
-                </div>
+<?php
 
-                <div class="card-body">
+$sql = "SELECT * FROM libros";
+$resultado = mysqli_query($conn,$sql);
 
-                    <div class="row text-center g-4">
+while($fila = mysqli_fetch_assoc($resultado)){
 
-                        <div class="col-md-4">
+?>
 
-                            <div class="stats-card">
+<tr>
 
-                                <div class="card-body">
+<td><?php echo $fila['id_libro']; ?></td>
+<td><?php echo $fila['titulo']; ?></td>
+<td><?php echo $fila['isbn']; ?></td>
+<td><?php echo $fila['categoria']; ?></td>
+<td><?php echo $fila['anio_publicacion']; ?></td>
+<td><?php echo $fila['stock']; ?></td>
+<td><?php echo $fila['id_autor']; ?></td>
 
-                                    <i class="bi bi-people-fill fs-1 mb-3 opacity-75"></i>
+</tr>
 
-                                    <h2 id="totalAuthors">
-                                        3
-                                    </h2>
+<?php } ?>
 
-                                    <p>
-                                        Total Autores
-                                    </p>
+</tbody>
 
-                                </div>
+</table>
 
-                            </div>
+</div>
 
-                        </div>
+<!-- PRESTAMOS -->
+<div id="prestamos" style="display:none;">
 
-                        <div class="col-md-4">
+<h3 class="mb-3">Préstamos</h3>
 
-                            <div class="stats-card">
+<table class="table table-hover bg-white">
 
-                                <div class="card-body">
+<thead>
 
-                                    <i class="bi bi-book-fill fs-1 mb-3 opacity-75"></i>
+<tr>
 
-                                    <h2 id="totalBooks">
-                                        3
-                                    </h2>
+<th>ID</th>
+<th>Usuario</th>
+<th>Libro</th>
+<th>Fecha préstamo</th>
+<th>Fecha devolución</th>
+<th>Estado</th>
 
-                                    <p>
-                                        Total Libros
-                                    </p>
+</tr>
 
-                                </div>
+</thead>
 
-                            </div>
+<tbody>
 
-                        </div>
+<?php
 
-                        <div class="col-md-4">
+$sql = "SELECT * FROM prestamos";
+$resultado = mysqli_query($conn,$sql);
 
-                            <div class="stats-card">
+while($fila = mysqli_fetch_assoc($resultado)){
 
-                                <div class="card-body">
+?>
 
-                                    <i class="bi bi-journal-bookmark-fill fs-1 mb-3 opacity-75"></i>
+<tr>
 
-                                    <h2 id="activeLoans">
-                                        0
-                                    </h2>
+<td><?php echo $fila['id_prestamo']; ?></td>
+<td><?php echo $fila['id_usuario']; ?></td>
+<td><?php echo $fila['id_libro']; ?></td>
+<td><?php echo $fila['fecha_prestamo']; ?></td>
+<td><?php echo $fila['fecha_devolucion']; ?></td>
+<td><?php echo $fila['estado']; ?></td>
 
-                                    <p>
-                                        Préstamos Activos
-                                    </p>
+</tr>
 
-                                </div>
+<?php } ?>
 
-                            </div>
+</tbody>
 
-                        </div>
+</table>
 
-                    </div>
+</div>
 
-                </div>
+</div>
 
-            </div>
+<script>
 
-        </div>
+function showSection(section){
 
-    </main>
+document.getElementById('dashboard').style.display='none';
+document.getElementById('autores').style.display='none';
+document.getElementById('libros').style.display='none';
+document.getElementById('prestamos').style.display='none';
 
-    <script>
+document.getElementById(section).style.display='block';
 
-        document.getElementById('sidebarToggle').addEventListener('click', function(){
+}
 
-            document.getElementById('sidebar').classList.toggle('show');
-            document.getElementById('sidebarBackdrop').classList.toggle('show');
+</script>
 
-        });
-
-        document.getElementById('sidebarBackdrop').addEventListener('click', function(){
-
-            document.getElementById('sidebar').classList.remove('show');
-            this.classList.remove('show');
-
-        });
-
-    </script>
-
-    <script src="./wwwroot/js/bootstrap.bundle.min.js"></script>
+<script src="./wwwroot/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>
-```
