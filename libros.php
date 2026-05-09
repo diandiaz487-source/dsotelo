@@ -5,22 +5,36 @@ require_once 'db.php';
 $db = conectarDB();
 $msg = '';
 
+// Agregar libro
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titulo'])) {
     $titulo   = trim($_POST['titulo']);
     $autor_id = (int) $_POST['autor_id'];
     if ($titulo && $autor_id) {
         $db->prepare("INSERT INTO libros (titulo, autor_id) VALUES (?, ?)")->execute([$titulo, $autor_id]);
-        $msg = 'success:Libro agregado correctamente.';
+        header("Location: libros.php?msg=ok");
+        exit();
     }
 }
+
+// Eliminar libro
 if (isset($_GET['delete'])) {
     try {
         $db->prepare("DELETE FROM libros WHERE id=?")->execute([$_GET['delete']]);
-        $msg = 'success:Libro eliminado.';
+        header("Location: libros.php?msg=deleted");
+        exit();
     } catch (Exception $e) {
-        $msg = 'error:No se puede eliminar, tiene préstamos asociados.';
+        header("Location: libros.php?msg=error");
+        exit();
     }
 }
+
+// Mensajes via GET (Post/Redirect/Get)
+if (isset($_GET['msg'])) {
+    if ($_GET['msg'] === 'ok')      $msg = 'success:Libro agregado correctamente.';
+    if ($_GET['msg'] === 'deleted') $msg = 'success:Libro eliminado.';
+    if ($_GET['msg'] === 'error')   $msg = 'error:No se puede eliminar, tiene préstamos asociados.';
+}
+
 $autores = $db->query("SELECT * FROM autores ORDER BY nombre ASC")->fetchAll();
 $libros  = $db->query("
     SELECT l.id, l.titulo, l.disponible, l.created_at, a.nombre AS autor
