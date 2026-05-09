@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if(isset($_COOKIE["id_usuarios"])) {
+  $_SESSION['id_usuarios'] = $_COOKIE["id_usuarios"];
+    header("Location: dashboard.php");
+    exit();
+}
+?>
 <!doctype html>
 <html lang="es">
   <head>
