@@ -108,9 +108,15 @@
   </head>
   <body>
     <div class="bib-card">
+<<<<<<< HEAD
       <h1 class="bib-title">Iniciar sesión</h1>
       <p class="bib-subtitle">Accede a tu cuenta de lector</p>
       <div class="bib-ornament">· · ·</div>
+=======
+      <h1 class="bib-title">Iniciar sesiónn</h1>
+      <p class="bib-subtitle">Acceder</p>
+      <div class="bib-ornament"></div>
+>>>>>>> ab6a88d4e98341e93dff5e849383da42e659c40c
       <form method="POST" action="login.php">
         <label class="bib-label" for="email">Correo electrónico</label>
         <input class="bib-input" type="email" id="email" name="email"
